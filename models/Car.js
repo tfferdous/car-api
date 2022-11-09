@@ -27,5 +27,7 @@ const carSchema = mongoose.Schema(
 	{ timestamps: true }
 );
 
+carSchema.index({ name: "text", desc: "text" });
+
 const Model = new mongoose.model("Car", carSchema);
 module.exports = Model;

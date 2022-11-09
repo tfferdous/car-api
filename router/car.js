@@ -19,13 +19,26 @@ router.post("/add", upload.single("image"), async (req, res) => {
 
 //get cars by category
 router.get("/", async (req, res) => {
-	const { category } = req.query;
-	const categories = Array.isArray(category) ? category : [category];
+	const { search, category } = req.query;
+	let queryObject = {};
+	if (search) {
+		queryObject = {
+			...queryObject,
+			$text: { $search: req.query.search },
+		};
+	}
+
+	if (category) {
+		queryObject = {
+			...queryObject,
+			category: { $in: Array.isArray(category) ? category : [category] },
+		};
+	}
 
 	//get cars by catgory
-	if (category) {
+	if (search || category) {
 		try {
-			let cars = await Car.find({ category: { $in: categories } });
+			let cars = await Car.find(queryObject);
 			res.status(200).json({
 				cars,
 			});
