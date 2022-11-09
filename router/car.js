@@ -64,6 +64,20 @@ router.get("/", async (req, res) => {
 	}
 });
 
+//get car by id
+router.get("/:id", async (req, res) => {
+	try {
+		let car = await Car.findById(req.params.id);
+		res.status(200).json({
+			car,
+		});
+	} catch (error) {
+		res.status(500).json({
+			message: error.message,
+		});
+	}
+});
+
 //update car
 router.put("/:id", async (req, res) => {
 	const { id } = req.params;
